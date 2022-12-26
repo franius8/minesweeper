@@ -7,3 +7,9 @@ h1 {
     font-family: 'Zen Tokyo Zoo' , cursive;
     margin: 1rem;
 }
+
+.App {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}

@@ -7,7 +7,7 @@ export default function Board(props: { board: string[][] }) {
         <div className="Board">
             {props.board.map((row, i) => (
                 row.map((field, j) => (
-                    <Field content={field} key={i * j}/>
+                    <Field content={field} x={i} y={j} key={i * 9 + j}/>
                 ))
             ))}
         </div>
