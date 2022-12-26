@@ -1,0 +1,9 @@
+/*noinspection CssUnknownTarget*/
+@import url('https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap');
+
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    font-family: 'Zen Tokyo Zoo' , cursive;
+    margin: 1rem;
+}
