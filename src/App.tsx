@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {MouseEventHandler, useEffect, useState} from 'react';
 import "./App.css";
 import Board from "./Board";
 
@@ -39,12 +39,24 @@ function App() {
             }
         }
         setBoard(newBoard);
+        console.log(minesLocations);
     }, []);
+
+    const handleClick = (x: number, y: number) => {
+        let newVisibleBoard = JSON.parse(JSON.stringify(visibleBoard));
+        if (minesLocations.has(x * 9 + y)) {
+            alert("You lost!");
+            newVisibleBoard = board;
+        } else {
+            newVisibleBoard[x][y] = board[x][y];
+        }
+        setVisibleBoard(newVisibleBoard);
+    }
 
   return (
     <div className="App">
         <h1>MINESWEEPER</h1>
-        <Board board={visibleBoard}/>
+        <Board click={handleClick} board={visibleBoard}/>
     </div>
   );
 }
