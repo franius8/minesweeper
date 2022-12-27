@@ -1,15 +1,11 @@
-/*noinspection CssUnknownTarget*/
-@import url('https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap');
-
-body {
-    height: 100vh;
-}
-
-h1 {
-    font-size: 3rem;
-    text-align: center;
-    font-family: 'Zen Tokyo Zoo' , cursive;
-    margin: 2rem;
+@font-face {
+    font-family: 'MINE-SWEEPER';
+    src: url('./fonts/MINE-SWEEPER.woff2') format('woff2'),
+    url('./fonts/MINE-SWEEPER.woff') format('woff'),
+    url('./fonts/MINE-SWEEPER.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 .App {

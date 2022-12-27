@@ -1,0 +1,7 @@
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    font-family: "MINE-SWEEPER", cursive;
+    margin: 2rem;
+    cursor: pointer;
+}

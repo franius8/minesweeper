@@ -1,17 +1,14 @@
 .Button {
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    transform: translate(0, -50%);
-    margin-left: 1rem;
+
     padding: 0.5rem;
     white-space: nowrap;
     border-radius: 0.5rem;
     background-color: lightgray;
     font-family: sans-serif;
+    font-weight: bold;
 }
 
 .Button:hover {
-    background-color: lightblue;
+    background-color: darkgray;
     cursor: pointer;
 }

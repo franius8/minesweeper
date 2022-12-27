@@ -1,10 +1,13 @@
-.Board {
+.Board, .Board-revealed {
     display: grid;
-    grid-template: repeat(9, 1fr) / repeat(9, 1fr);
     grid-gap: 2px;
     border: 2px solid black;
     background-color: black;
     width: 55vh;
     height: 55vh;
     border-radius: 0.2rem;
+}
+
+.Board-revealed {
+    pointer-events: none;
 }

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import "./App.css";
 import Game from "./Game";
+import Header from "./Header";
 
-function App() {
+export default function App() {
     const [counter, setCounter] = useState(0);
 
     const increment = () => {
@@ -11,10 +12,8 @@ function App() {
 
   return (
     <div className="App">
-        <h1>MINESWEEPER</h1>
+        <Header />
         <Game key={counter} increment={increment}/>
     </div>
   );
 }
-
-export default App;

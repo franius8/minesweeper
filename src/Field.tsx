@@ -77,6 +77,12 @@ export default function Field(props: FieldProps) {
                 <img src={"./icons/bomb.svg"} alt={"X"}/>
             </div>
         );
+    } else if (props.content === "?") {
+        return (
+            <div className={"Field-marked"} onClick={handleClick} onContextMenu={handleContextMenu}>
+                <img className={"Flag"} src={"./icons/flag.svg"} alt={"X"}/>
+            </div>
+        );
     } else {
         return (
             <div className={className} onClick={handleClick} onContextMenu={handleContextMenu} style={fieldStyle}>
