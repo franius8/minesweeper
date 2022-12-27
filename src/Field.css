@@ -21,7 +21,11 @@
     background-color: red;
 }
 
-.Field:hover {
+.Field-marked {
+    background-color: lightgreen;
+}
+
+.Field:hover, .Field-marked:hover {
     background-color: lightblue;
     cursor: pointer;
 }

@@ -88,10 +88,20 @@ function App() {
         return visibleBoard;
     }
 
+    const setMarked = (x: number, y: number) => {
+        let newVisibleBoard = JSON.parse(JSON.stringify(visibleBoard));
+        if (newVisibleBoard[x][y] === ".") {
+            newVisibleBoard[x][y] = "?";
+        }  else if (newVisibleBoard[x][y] === "?") {
+            newVisibleBoard[x][y] = ".";
+        }
+        setVisibleBoard(newVisibleBoard);
+    }
+
   return (
     <div className="App">
         <h1>MINESWEEPER</h1>
-        <Board click={handleClick} board={visibleBoard}/>
+        <Board click={handleClick} contextMenu={setMarked} board={visibleBoard}/>
     </div>
   );
 }
