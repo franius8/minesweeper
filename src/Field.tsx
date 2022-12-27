@@ -1,4 +1,4 @@
-import React, {MouseEventHandler} from "react";
+import React, {MouseEventHandler, useEffect} from "react";
 import "./Field.css";
 
 interface FieldProps {
@@ -11,6 +11,11 @@ interface FieldProps {
 export default function Field(props: FieldProps) {
 
     const [marked, setMarked] = React.useState(false);
+
+    useEffect(() => {
+        setMarked(props.content === "?");
+    }, [props.content]);
+
     const inner = (props.content === "." || props.content === "/" || props.content === "?") ? "" : props.content;
     let className: string;
     switch (props.content) {
@@ -64,13 +69,19 @@ export default function Field(props: FieldProps) {
 
     const handleContextMenu: MouseEventHandler<HTMLDivElement> = (e) => {
         e.preventDefault()
-        setMarked(!marked);
         props.contextMenu(props.x, props.y);
     }
-
-    return (
-        <div onClick={handleClick} onContextMenu={handleContextMenu} className={className} style={fieldStyle}>
-            {inner}
-        </div>
-    );
+    if (props.content === "X") {
+        return (
+            <div className={"Field-mine"} onClick={handleClick} onContextMenu={handleContextMenu}>
+                <img src={"./icons/bomb.svg"} alt={"X"}/>
+            </div>
+        );
+    } else {
+        return (
+            <div className={className} onClick={handleClick} onContextMenu={handleContextMenu} style={fieldStyle}>
+                {inner}
+            </div>
+        );
+    }
 }
