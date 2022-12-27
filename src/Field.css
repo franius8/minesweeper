@@ -1,4 +1,4 @@
-.Field, .Field-revealed {
+.Field, .Field-revealed, .Field-mine {
     padding: 0.5rem;
     display: flex;
     justify-content: center;
@@ -15,6 +15,10 @@
 
 .Field-revealed {
     background-color: lightgray;
+}
+
+.Field-mine {
+    background-color: red;
 }
 
 .Field:hover {

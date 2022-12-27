@@ -1,15 +1,20 @@
 /*noinspection CssUnknownTarget*/
 @import url('https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap');
 
+body {
+    height: 100vh;
+}
+
 h1 {
     font-size: 3rem;
     text-align: center;
     font-family: 'Zen Tokyo Zoo' , cursive;
-    margin: 1rem;
+    margin: 2rem;
 }
 
 .App {
     display: flex;
     align-items: center;
     flex-direction: column;
+    height: 100vh;
 }

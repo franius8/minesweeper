@@ -44,13 +44,48 @@ function App() {
 
     const handleClick = (x: number, y: number) => {
         let newVisibleBoard = JSON.parse(JSON.stringify(visibleBoard));
-        if (minesLocations.has(x * 9 + y)) {
+        if (board[x][y] === "X") {
             alert("You lost!");
             newVisibleBoard = board;
-        } else {
+            newVisibleBoard.map((row: string[], i: number) => (
+                row.map((field, j) => {
+                    if (field === ".") {
+                        newVisibleBoard[i][j] = "/";
+                    }
+                })
+            ));
+        } else if (board[x][y] !== ".") {
             newVisibleBoard[x][y] = board[x][y];
+        } else {
+            newVisibleBoard = revealEmptyFields(board, x, y, newVisibleBoard);
         }
         setVisibleBoard(newVisibleBoard);
+    }
+
+    const revealEmptyFields = (board: string[][], x: number, y: number, visibleBoard: string[][]) => {
+        let queue = [[x, y]];
+        let used = new Set();
+        while (queue.length > 0) {
+            let [x, y] = queue.shift() as number[];
+            if (used.has(x * 9 + y)) {
+                continue;
+            }
+            used.add(x * 9 + y);
+            if (visibleBoard[x][y] === ".") {
+                visibleBoard[x][y] = board[x][y];
+                if (board[x][y] === ".") {
+                    visibleBoard[x][y] = "/";
+                    for (let i = -1; i <= 1; i++) {
+                        for (let j = -1; j <= 1; j++) {
+                            if (x + i >= 0 && x + i < 9 && y + j >= 0 && y + j < 9) {
+                                queue.push([x + i, y + j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return visibleBoard;
     }
 
   return (

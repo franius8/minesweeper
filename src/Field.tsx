@@ -8,8 +8,18 @@ interface FieldProps {
     click: (x: number, y: number) => void;
 }
 export default function Field(props: FieldProps) {
-    const inner = props.content === "." ? "" : props.content;
-    const className = props.content === "." ? "Field" : "Field-revealed";
+    const inner = (props.content === "." || props.content === "/") ? "" : props.content;
+    let className = "Field";
+    switch (props.content) {
+        case "X":
+            className = " Field-mine";
+            break;
+        case ".":
+            className = " Field";
+            break;
+        default:
+            className = " Field-revealed"
+    }
     let innerColor
     switch (props.content) {
         case "1":
