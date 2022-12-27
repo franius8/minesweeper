@@ -11,8 +11,9 @@ function Game(props: { increment: () => void }) {
     const [minesLocations, setMinesLocations] = useState(new Set<number>());
     const [initialMines, setInitialMines] = useState(10);
     const [remainingMines, setRemainingMines] = useState(initialMines);
-    const [initialClick, setInitialClick] = useState(true);
     const [gameState, setGameState] = useState("playing");
+    const [clicks, setClicks] = useState(0);
+    const [threeBV, setThreeBV] = useState(0);
 
     const determineNumber = (field: string) => {
         if (field === ".") {
@@ -32,7 +33,6 @@ function Game(props: { increment: () => void }) {
                 }
             }
         }
-        console.log(newBoard);
         return newBoard;
     }
 
@@ -52,17 +52,16 @@ function Game(props: { increment: () => void }) {
                 newBoard = markNumbers(newBoard, x, y);
             }
         }
-        console.log(newBoard);
+        setThreeBV(calculate3BV(newBoard));
         return newBoard;
     }
 
     const handleClick = (x: number, y: number) => {
         let newVisibleBoard = JSON.parse(JSON.stringify(visibleBoard));
         let currentBoard = JSON.parse(JSON.stringify(board));
-        if (currentBoard[x][y] === "X" && initialClick) {
+        if (currentBoard[x][y] === "X" && clicks === 0) {
             alert("You clicked on a mine! Try again!");
             currentBoard = Array.from({length: boardSide}, e => Array(boardSide).fill("."));
-            console.log(currentBoard);
             while(minesLocations.has(x * boardSide + y)){
                 minesLocations.delete(x * boardSide + y);
                 minesLocations.add(Math.floor(Math.random() * boardSide) * boardSide + Math.floor(Math.random() * boardSide));
@@ -73,7 +72,6 @@ function Game(props: { increment: () => void }) {
                 currentBoard[x][y] = "X";
                 currentBoard = markNumbers(currentBoard, x, y);
             });
-            console.log(currentBoard);
             setBoard(currentBoard);
         }
         if (currentBoard[x][y] === "X") {
@@ -95,10 +93,10 @@ function Game(props: { increment: () => void }) {
         }
         setVisibleBoard(newVisibleBoard);
         checkVictory(newVisibleBoard);
-        setInitialClick(false);
+        setClicks(clicks + 1);
     }
 
-    const revealEmptyFields = (board: string[][], x: number, y: number, visibleBoard: string[][]) => {
+    const revealEmptyFields = (board: string[][], x: number, y: number, visibleBoard: string[][], for3BV:boolean = false) => {
         let queue = [[x, y]];
         let used = new Set();
         while (queue.length > 0) {
@@ -108,7 +106,11 @@ function Game(props: { increment: () => void }) {
             }
             used.add(x * boardSide + y);
             if (visibleBoard[x][y] === ".") {
-                visibleBoard[x][y] = board[x][y];
+                if (for3BV) {
+                    visibleBoard[x][y] = "/";
+                } else {
+                    visibleBoard[x][y] = board[x][y];
+                }
                 if (board[x][y] === ".") {
                     visibleBoard[x][y] = "/";
                     for (let i = -1; i <= 1; i++) {
@@ -198,9 +200,32 @@ function Game(props: { increment: () => void }) {
         props.increment();
     }
 
+    const calculate3BV = (board: string[][]) => {
+        let counter = 0;
+        let markedFields = Array.from({length: boardSide}, e => Array(boardSide).fill("."))
+        board.forEach((row: string[], i: number) => (
+            row.forEach((field, j) => {
+                if (markedFields[i][j] !== ".") {
+                    return;
+                }
+                if (board[i][j] === ".") {
+                    counter++;
+                    markedFields = revealEmptyFields(board, i, j, markedFields, true);
+                }
+            })));
+        markedFields.forEach((row: string[], i: number) => (
+            row.forEach((field, j) => {
+                if (field === "." && board[i][j] !== "X") {
+                    counter++;
+                }
+            })));
+        return counter;
+    }
+
     return (
         <div className="Game">
-            <Display gameState={gameState} onClick={newGame} total={initialMines} remaining={remainingMines} />
+            <Display gameState={gameState} onClick={newGame} total={initialMines} remaining={remainingMines}
+                    threeBV={threeBV} clicks={clicks}/>
             <Board gameState={gameState} click={handleClick} contextMenu={setMarked}
                    board={visibleBoard} boardSide={boardSide}/>
         </div>
