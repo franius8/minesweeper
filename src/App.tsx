@@ -3,7 +3,11 @@ import "./App.css";
 import Game from "./Game";
 import Header from "./Header";
 
-export default function App() {
+interface AppProps {
+    difficulty: string;
+}
+
+export default function App(props: AppProps) {
     const [counter, setCounter] = useState(0);
 
     const increment = () => {
@@ -13,7 +17,7 @@ export default function App() {
   return (
     <div className="App">
         <Header />
-        <Game key={counter} increment={increment}/>
+        <Game key={counter} increment={increment} difficulty={props.difficulty}/>
     </div>
   );
 }

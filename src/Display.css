@@ -35,7 +35,7 @@
     color: green;
 }
 
-p {
+.Display p {
     font-family: 'MINE-SWEEPER', sans-serif;
     font-size: 3.5rem;
     line-height: 4rem;

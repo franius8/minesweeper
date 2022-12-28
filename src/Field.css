@@ -19,6 +19,32 @@
     line-height: 0;
 }
 
+.Board-intermediate .Field, .Board-intermediate .Field-revealed, .Board-intermediate .Field-mine {
+    padding: 0.25rem;
+}
+
+.Board-intermediate .Field-revealed {
+    font-size: 2vh;
+}
+
+.Board-intermediate .Field-mine img {
+    width: 2vh;
+    height: 2vh;
+}
+
+.Board-expert .Field, .Board-expert .Field-revealed, .Board-expert .Field-mine {
+    padding: 0.25rem;
+}
+
+.Board-expert .Field-revealed {
+    font-size: 1.75vh;
+}
+
+.Board-expert .Field-mine img {
+    width: 1.75vh;
+    height: 1.75vh;
+}
+
 .Field {
     background-color: #ababab;
 }
