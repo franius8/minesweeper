@@ -23,7 +23,7 @@ function Game(props: GameProps) {
             columns = 16;
             break;
         case "Expert":
-            mines = 90;
+            mines = 95;
             rows = 16;
             columns = 30;
             break;
@@ -83,15 +83,45 @@ function Game(props: GameProps) {
 
     const prepareBoard = (board: string[][]) => {
         let newBoard = board;
-        while (minesLocations.size < remainingMines) {
-            let x = Math.floor(Math.random() * boardSide);
-            let y = Math.floor(Math.random() * boardColumns);
-            if (newBoard[x][y] === ".") {
-                newBoard[x][y] = "X";
-                minesLocations.add(x * boardColumns + y);
-                newBoard = markNumbers(newBoard, x, y);
+        if (props.difficulty !== "Expert") {
+            while (minesLocations.size < remainingMines) {
+                let x = Math.floor(Math.random() * boardSide);
+                let y = Math.floor(Math.random() * boardColumns);
+                if (newBoard[x][y] !== "X") {
+                    newBoard[x][y] = "X";
+                    minesLocations.add(x * boardColumns + y);
+                    newBoard = markNumbers(newBoard, x, y);
+                }
+            }
+        } else {
+            while (minesLocations.size < remainingMines) {
+                let x = Math.floor(Math.random() * boardSide);
+                let y = Math.floor(Math.random() * boardColumns);
+                if (newBoard[x][y] !== "X") {
+                    newBoard[x][y] = "X";
+                    minesLocations.add(x * boardColumns + y);
+                    newBoard = markNumbers(newBoard, x, y);
+                    /*if (Math.random() > 0.5 && minesLocations.size < remainingMines - 1) {
+                        console.log("double");
+                        let newMine = Math.floor(Math.random() * 8);
+                        let xOffset = Math.floor(newMine / 3) - 1;
+                        let yOffset = newMine % 3 - 1;
+                        if (xOffset === 0 && yOffset === 0) {
+                            Math.random() > 0.5 ? yOffset = 1 : yOffset = -1;
+                        }
+                        if (x + xOffset >= 0 && x + xOffset < boardSide &&
+                            y + yOffset >= 0 && y + yOffset < boardColumns &&
+                            newBoard[x + xOffset][y + yOffset] !== "X") {
+                            newBoard[x + xOffset][y + yOffset] = "X";
+                            minesLocations.add((x + xOffset) * boardColumns + y + yOffset);
+                            newBoard = markNumbers(newBoard, x + xOffset, y + yOffset);
+                        }
+                    }*/
+
+                }
             }
         }
+
         setThreeBV(calculate3BV(newBoard));
         return newBoard;
     }
