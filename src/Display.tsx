@@ -18,12 +18,16 @@ export default function Display(props: DisplayProps) {
     const routeChange = () =>{
         navigate("/info");
     }
+    const difficultyChange = () => {
+        navigate("/");
+    }
+
     if (props.gameState === "playing") {
         return (
             <div className="Display">
                 <div className="Display-time">
-                    <h3>Time</h3>
-                    <p>{props.time}</p>
+                    <h2>Time</h2>
+                    <p>{Math.floor(props.time / 60)}:{String(props.time % 60).padStart(2, "0")}</p>
                 </div>
                 <div className="Display-total">
                     <h2>Total mines:</h2>
@@ -34,6 +38,7 @@ export default function Display(props: DisplayProps) {
                     <p>{String(props.remaining).padStart(2, "0")}</p>
                 </div>
                 <Button onClick={props.onClick} content={"New Game"}/>
+                <Button onClick={difficultyChange} content={"Change difficulty"}/>
                 <Button onClick={routeChange} content={"Info"}/>
             </div>
         );
@@ -66,6 +71,7 @@ export default function Display(props: DisplayProps) {
                     </div>
                 </div>
                 <Button onClick={props.onClick} content={"New Game"}/>
+                <Button onClick={difficultyChange} content={"Change difficulty"}/>
                 <Button onClick={routeChange} content={"Info"}/>
             </div>
         );
@@ -74,6 +80,7 @@ export default function Display(props: DisplayProps) {
             <div className="Display-lost">
                 <h2 className={"endgame-heading lost"}>You lost!</h2>
                 <Button onClick={props.onClick} content={"New Game"}/>
+                <Button onClick={difficultyChange} content={"Change difficulty"}/>
                 <Button onClick={routeChange} content={"Info"}/>
             </div>
         );

@@ -96,9 +96,11 @@ function Game(props: GameProps) {
         return newBoard;
     }
 
+    //function to handle click on field
     const handleClick = (x: number, y: number) => {
         let newVisibleBoard = JSON.parse(JSON.stringify(visibleBoard));
         let currentBoard = JSON.parse(JSON.stringify(board));
+        // path if the first field clicked is a mine
         if (currentBoard[x][y] === "X" && clicks === 0) {
             currentBoard = Array.from({length: boardSide}, e => Array(boardColumns).fill("."));
             while(minesLocations.has(x * boardColumns + y)){
@@ -113,17 +115,37 @@ function Game(props: GameProps) {
             });
             setBoard(currentBoard);
         }
-        if (currentBoard[x][y] === "X") {
-                setGameState("lost");
-                newVisibleBoard = currentBoard;
-                newVisibleBoard.map((row: string[], i: number) => (
-                    row.forEach((field, j) => {
-                        if (field === ".") {
-                            newVisibleBoard[i][j] = "/";
+        if (currentBoard[x][y] === newVisibleBoard[x][y] && currentBoard[x][y].match(/[1-8]/)) {
+            let counter = 0;
+            for(let i = -1; i <= 1; i++){
+                for(let j = -1; j <= 1; j++){
+                    if(x + i >= 0 && x + i < boardSide && y + j >= 0 && y + j < boardColumns){
+                        if(newVisibleBoard[x + i][y + j] === "?"){
+                            counter++;
                         }
-                    })
-                ));
-                setVisibleBoard(newVisibleBoard);
+                    }
+                }
+            }
+            if (counter === parseInt(currentBoard[x][y])) {
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        if (x + i >= 0 && x + i < boardSide && y + j >= 0 && y + j < boardColumns) {
+                            if (newVisibleBoard[x + i][y + j] !== "?") {
+                                if (currentBoard[x + i][y + j] === "X") {
+                                    setGameState("lost");
+                                    setVisibleBoard(revealAfterLoss(currentBoard));
+                                    return;
+                                } else if (newVisibleBoard[x + i][y + j] === ".") {
+                                    newVisibleBoard = revealEmptyFields(currentBoard, x + i, y + j, newVisibleBoard);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (currentBoard[x][y] === "X") {
+                setGameState("lost");
+                setVisibleBoard(revealAfterLoss(currentBoard));
                 return;
         } else if (currentBoard[x][y] !== ".") {
             newVisibleBoard[x][y] = currentBoard[x][y];
@@ -133,6 +155,18 @@ function Game(props: GameProps) {
         setVisibleBoard(newVisibleBoard);
         checkVictory(newVisibleBoard);
         setClicks(clicks + 1);
+    }
+
+    const revealAfterLoss = (board: string[][]) => {
+        let newVisibleBoard = board;
+        newVisibleBoard.map((row: string[], i: number) => (
+            row.forEach((field, j) => {
+                if (field === ".") {
+                    newVisibleBoard[i][j] = "/";
+                }
+            }
+        )));
+        return newVisibleBoard;
     }
 
     const revealEmptyFields = (board: string[][], x: number, y: number, visibleBoard: string[][], for3BV:boolean = false) => {

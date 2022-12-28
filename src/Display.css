@@ -37,9 +37,18 @@
 
 .Display p, .Display-won p {
     font-family: 'MINE-SWEEPER', sans-serif;
-    font-size: 3.5rem;
-    line-height: 4rem;
+    font-size: 2.5rem;
+    line-height: 3rem;
     margin: 0.5rem;
+}
+
+.Display h2 {
+    margin: 0;
+}
+
+.Display-time p {
+    font-size: 2.5rem;
+    line-height: 3rem;
 }
 
 .Display-won h2 {
