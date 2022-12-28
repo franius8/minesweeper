@@ -10,6 +10,7 @@ interface DisplayProps {
     gameState: string
     clicks: number
     threeBV: number
+    time: number
 }
 
 export default function Display(props: DisplayProps) {
@@ -20,6 +21,10 @@ export default function Display(props: DisplayProps) {
     if (props.gameState === "playing") {
         return (
             <div className="Display">
+                <div className="Display-time">
+                    <h3>Time</h3>
+                    <p>{props.time}</p>
+                </div>
                 <div className="Display-total">
                     <h2>Total mines:</h2>
                     <p>{props.total}</p>
@@ -36,17 +41,29 @@ export default function Display(props: DisplayProps) {
         return (
             <div className="Display-won">
                 <h2 className={"endgame-heading won"}>You won!</h2>
-                <div className="Display-clicks">
-                    <h2>Your clicks:</h2>
-                    <p>{props.clicks}</p>
+                <div className={"Display-timeclickscontainer"}>
+                    <div className="Display-time">
+                        <h2>Time</h2>
+                        <p>{props.time}</p>
+                    </div>
+                    <div className="Display-clicks">
+                        <h2>Clicks:</h2>
+                        <p>{props.clicks}</p>
+                    </div>
                 </div>
                 <div className="Display-threebv">
                     <h2>Board's 3BV:</h2>
                     <p>{props.threeBV}</p>
                 </div>
-                <div className="Display-efficiency">
-                    <h2>Efficiency:</h2>
-                    <p>{Math.round(props.threeBV / props.clicks * 100)}%</p>
+                <div className={"Display-efficiencycontainer"}>
+                    <div className="Display-efficiency">
+                        <h2>Efficiency:</h2>
+                        <p>{Math.round(props.threeBV / props.clicks * 100)}%</p>
+                    </div>
+                    <div className="Display-threebvpersecond">
+                        <h2>3BV/s:</h2>
+                        <p>{(props.threeBV / props.time).toFixed(2)}</p>
+                    </div>
                 </div>
                 <Button onClick={props.onClick} content={"New Game"}/>
                 <Button onClick={routeChange} content={"Info"}/>

@@ -35,7 +35,7 @@
     color: green;
 }
 
-.Display p {
+.Display p, .Display-won p {
     font-family: 'MINE-SWEEPER', sans-serif;
     font-size: 3.5rem;
     line-height: 4rem;
@@ -49,4 +49,11 @@
 .Display-won p {
     font-size: 1.5rem;
     line-height: 2rem;
+}
+
+.Display-timeclickscontainer, .Display-efficiencycontainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
 }

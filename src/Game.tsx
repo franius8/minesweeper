@@ -44,6 +44,7 @@ function Game(props: GameProps) {
     const [gameState, setGameState] = useState("playing");
     const [clicks, setClicks] = useState(0);
     const [threeBV, setThreeBV] = useState(0);
+    const [time, setTime] = useState(0);
 
     const determineNumber = (field: string) => {
         if (field === ".") {
@@ -70,6 +71,15 @@ function Game(props: GameProps) {
         const newBoard = prepareBoard(board)
         setBoard(newBoard);
     }, []);
+
+    useEffect(() => {
+        if (gameState === "playing") {
+            const interval = setInterval(() => {
+                setTime(time + 1);
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [gameState, time]);
 
     const prepareBoard = (board: string[][]) => {
         let newBoard = board;
@@ -254,7 +264,7 @@ function Game(props: GameProps) {
     return (
         <div className="Game">
             <Display gameState={gameState} onClick={newGame} total={initialMines} remaining={remainingMines}
-                    threeBV={threeBV} clicks={clicks}/>
+                    threeBV={threeBV} clicks={clicks} time={time}/>
             <Board gameState={gameState} click={handleClick} contextMenu={setMarked}
                    board={visibleBoard} boardSide={boardSide} boardColumns={boardColumns} difficulty={props.difficulty}/>
         </div>
