@@ -23,7 +23,7 @@ function Game(props: GameProps) {
             columns = 16;
             break;
         case "Expert":
-            mines = 95;
+            mines = 99;
             rows = 16;
             columns = 30;
             break;
@@ -56,7 +56,7 @@ function Game(props: GameProps) {
     }
 
     const markNumbers = (board: string[][], x: number, y:number) => {
-        let newBoard = board; //deep copy of nested array
+        let newBoard = board;
         for(let i = -1; i <= 1; i++){
             for(let j = -1; j <= 1; j++){
                 if(x + i >= 0 && x + i < boardSide && y + j >= 0 && y + j < boardColumns){
@@ -82,7 +82,7 @@ function Game(props: GameProps) {
     }, [gameState, time]);
 
     const prepareBoard = (board: string[][]) => {
-        let newBoard = board;
+        let newBoard = board.map(row => [...row]);
         if (props.difficulty !== "Expert") {
             while (minesLocations.size < remainingMines) {
                 let x = Math.floor(Math.random() * boardSide);
@@ -139,7 +139,7 @@ function Game(props: GameProps) {
             }
             minesLocations.forEach((mine: number) => {
                 let x = Math.floor(mine / boardColumns);
-                let y = mine % boardSide;
+                let y = mine % boardColumns;
                 currentBoard[x][y] = "X";
                 currentBoard = markNumbers(currentBoard, x, y);
             });
@@ -230,7 +230,7 @@ function Game(props: GameProps) {
     }
 
     const setMarked = (x: number, y: number) => {
-        let newVisibleBoard = visibleBoard;
+        let newVisibleBoard = visibleBoard.map(row => [...row]);
         if (newVisibleBoard[x][y] === ".") {
             if (remainingMines === 0) {
                 alert("You can't mark more fields!");
@@ -257,7 +257,7 @@ function Game(props: GameProps) {
         ));
         if (victory) {
             setGameState("victory");
-            let newVisibleBoard = board;
+            let newVisibleBoard = board.map(row => [...row]);
             newVisibleBoard.map((row: string[], i: number) => (
                 row.forEach((field, j) => {
                     if (field === ".") {
@@ -287,7 +287,7 @@ function Game(props: GameProps) {
         }
         if (victory) {
             setGameState("victory");
-            let newVisibleBoard = board;
+            let newVisibleBoard = board.map(row => [...row]);
             newVisibleBoard.map((row: string[], i: number) => (
                 row.forEach((field, j) => {
                     if (field === ".") {

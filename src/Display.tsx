@@ -49,7 +49,7 @@ export default function Display(props: DisplayProps) {
                 <div className={"Display-timeclickscontainer"}>
                     <div className="Display-time">
                         <h2>Time</h2>
-                        <p>{props.time}</p>
+                        <p>{Math.floor(props.time / 60)}:{String(props.time % 60).padStart(2, "0")}</p>
                     </div>
                     <div className="Display-clicks">
                         <h2>Clicks:</h2>
@@ -67,7 +67,7 @@ export default function Display(props: DisplayProps) {
                     </div>
                     <div className="Display-threebvpersecond">
                         <h2>3BV/s:</h2>
-                        <p>{(props.threeBV / props.time).toFixed(2)}</p>
+                        <p>{props.time > 0 ? (props.threeBV / props.time).toFixed(2) : "N/A"}</p>
                     </div>
                 </div>
                 <Button onClick={props.onClick} content={"New Game"}/>
