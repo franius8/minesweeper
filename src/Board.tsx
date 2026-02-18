@@ -39,7 +39,7 @@ export default function Board(props: BoardProps) {
                 row.map((field, j) => (
                     <Field content={field}
                            click={props.click} contextMenu={props.contextMenu}
-                           x={i} y={j} key={i * props.boardSide + j}/>
+                           x={i} y={j} key={i * props.boardColumns + j}/>
                 ))
             ))}
         </div>
