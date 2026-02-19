@@ -67,10 +67,7 @@ function Game(props: GameProps) {
         return newBoard;
     }
 
-    useEffect(() => {
-        const newBoard = prepareBoard(board)
-        setBoard(newBoard);
-    }, []);
+    // Board is generated on first click to guarantee an open starting area
 
     useEffect(() => {
         if (gameState === "playing") {
@@ -81,44 +78,31 @@ function Game(props: GameProps) {
         }
     }, [gameState, time]);
 
-    const prepareBoard = (board: string[][]) => {
+    const prepareBoard = (board: string[][], safeX?: number, safeY?: number) => {
         let newBoard = board.map(row => [...row]);
-        if (props.difficulty !== "Expert") {
-            while (minesLocations.size < remainingMines) {
-                let x = Math.floor(Math.random() * boardSide);
-                let y = Math.floor(Math.random() * boardColumns);
-                if (newBoard[x][y] !== "X") {
-                    newBoard[x][y] = "X";
-                    minesLocations.add(x * boardColumns + y);
-                    newBoard = markNumbers(newBoard, x, y);
+
+        // Build a set of cells that cannot receive mines (the 3x3 area around the first click)
+        const safeCells = new Set<number>();
+        if (safeX !== undefined && safeY !== undefined) {
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    const nx = safeX + i;
+                    const ny = safeY + j;
+                    if (nx >= 0 && nx < boardSide && ny >= 0 && ny < boardColumns) {
+                        safeCells.add(nx * boardColumns + ny);
+                    }
                 }
             }
-        } else {
-            while (minesLocations.size < remainingMines) {
-                let x = Math.floor(Math.random() * boardSide);
-                let y = Math.floor(Math.random() * boardColumns);
-                if (newBoard[x][y] !== "X") {
-                    newBoard[x][y] = "X";
-                    minesLocations.add(x * boardColumns + y);
-                    newBoard = markNumbers(newBoard, x, y);
-                    /*if (Math.random() > 0.5 && minesLocations.size < remainingMines - 1) {
-                        console.log("double");
-                        let newMine = Math.floor(Math.random() * 8);
-                        let xOffset = Math.floor(newMine / 3) - 1;
-                        let yOffset = newMine % 3 - 1;
-                        if (xOffset === 0 && yOffset === 0) {
-                            Math.random() > 0.5 ? yOffset = 1 : yOffset = -1;
-                        }
-                        if (x + xOffset >= 0 && x + xOffset < boardSide &&
-                            y + yOffset >= 0 && y + yOffset < boardColumns &&
-                            newBoard[x + xOffset][y + yOffset] !== "X") {
-                            newBoard[x + xOffset][y + yOffset] = "X";
-                            minesLocations.add((x + xOffset) * boardColumns + y + yOffset);
-                            newBoard = markNumbers(newBoard, x + xOffset, y + yOffset);
-                        }
-                    }*/
+        }
 
-                }
+        while (minesLocations.size < remainingMines) {
+            let x = Math.floor(Math.random() * boardSide);
+            let y = Math.floor(Math.random() * boardColumns);
+            const pos = x * boardColumns + y;
+            if (newBoard[x][y] !== "X" && !safeCells.has(pos)) {
+                newBoard[x][y] = "X";
+                minesLocations.add(pos);
+                newBoard = markNumbers(newBoard, x, y);
             }
         }
 
@@ -129,21 +113,17 @@ function Game(props: GameProps) {
     //function to handle click on field
     const handleClick = (x: number, y: number) => {
         let newVisibleBoard = JSON.parse(JSON.stringify(visibleBoard));
-        let currentBoard = JSON.parse(JSON.stringify(board));
-        // path if the first field clicked is a mine
-        if (currentBoard[x][y] === "X" && clicks === 0) {
-            currentBoard = Array.from({length: boardSide}, e => Array(boardColumns).fill("."));
-            while(minesLocations.has(x * boardColumns + y)){
-                minesLocations.delete(x * boardColumns + y);
-                minesLocations.add(Math.floor(Math.random() * boardSide) * boardColumns + Math.floor(Math.random() * boardColumns));
-            }
-            minesLocations.forEach((mine: number) => {
-                let x = Math.floor(mine / boardColumns);
-                let y = mine % boardColumns;
-                currentBoard[x][y] = "X";
-                currentBoard = markNumbers(currentBoard, x, y);
-            });
+        let currentBoard: string[][];
+        // On the first click, generate mines while keeping the clicked cell and its
+        // neighbors mine-free, guaranteeing an open area is revealed immediately.
+        if (clicks === 0) {
+            currentBoard = prepareBoard(
+                Array.from({length: boardSide}, e => Array(boardColumns).fill(".")),
+                x, y
+            );
             setBoard(currentBoard);
+        } else {
+            currentBoard = JSON.parse(JSON.stringify(board));
         }
         if (currentBoard[x][y] === newVisibleBoard[x][y] && currentBoard[x][y].match(/[1-8]/)) {
             let counter = 0;
